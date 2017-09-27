@@ -1,6 +1,5 @@
 <?php
 
-
 $status = 'OK';
 $response = null;
 $error = 0;
@@ -12,7 +11,7 @@ $winner = null;
 
 $budget = 0;
 $bid = 0;
-$items = array(); // Массив  Response JSON
+$items = array(); //   Response JSON
 
   $servername = "localhost";
   $username = "cp62865_st";
@@ -58,9 +57,9 @@ $targeting = "SELECT companies.Company, country.Country, category.Category, comp
  ORDER BY companies.Bid DESC";
 
  
- $targeting_set = $connect->query($targeting);
+$targeting_set = $connect->query($targeting);
 
- while (($row1 = $targeting_set->fetch_assoc()) != false) {
+while (($row1 = $targeting_set->fetch_assoc()) != false) {
  
    $requeststatus = 0;
    
@@ -75,22 +74,16 @@ $targeting = "SELECT companies.Company, country.Country, category.Category, comp
    
   //------- Choising of winner 
   if ($winnercompany == null && $row1[Category] != null && $row1[Country] != null && $row1[Bid] >= $basebid && $row1[Budget] >= $basebid) {
- //  !($winnercompany != null) && 
- //   $winner = $row1[Company]; 
     
     $winnercompany = $row1[Company];
     $winnerbudget = $row1[Budget];
     $winnerbid = $row1[Bid];
     $requeststatus = 1; 
     $answer = "Winner is ".$winnercompany;
-
+    $items = $row1; 
     
-     $items = $row1;  
-//    echo  $winnercompany."<br>";
-    
-  }
+   }
   
-//  echo $row1[Company].' | '.$row1[Category].' | '.$row1[Country].' | '.$row1[Bid].' | '.$row1[Budget].' | '.$targeting_pass.' | '.$bid_pass.' | '.$budget_pass.'<br/>';
   
 //-----------------Insert all companies in Log  
 
@@ -106,7 +99,7 @@ $insert_set = $connect->query($insertlog);
   
 }
 
-    //------1-- Changing New Budget DB
+    //-------- Changing New Budget DB
 
 if  ($winnercompany != null) {      // if winner 
 
@@ -117,9 +110,6 @@ if  ($winnercompany != null) {      // if winner
         $error = 2;
     }      
 }
-
-
-
 
 // массив для ответа
 $result = array(
@@ -137,13 +127,13 @@ echo json_encode($bid);
 echo json_encode($budget);
 echo json_encode($requeststatus);
 */
-//echo '<Br/>---------------- WINNER VIEW------------- <br/>';
+//echo '<Br>---------------- WINNER VIEW------------- <br>';
 echo json_encode($answer);
-echo '<Br/>---------------- JSON ANSWER------------- <br/>';
+echo '<Br>---------------- JSON ANSWER------------- <br>';
 echo json_encode($items);
-//echo '<Br/>---------------- ERROR VIEW------------- <br/>';
+//echo '<Br>---------------- ERROR VIEW------------- <br>';
 //echo json_encode($result); // ответ в формате json
-echo '<Br/>---------------- LOG VIEW------------- <br/>';
+echo '<Br>---------------- LOG VIEW------------- <br>';
 
 $result_log = $connect->query("SELECT * FROM logfile1 ORDER BY ActID DESC");
 while (($row = $result_log->fetch_assoc()) != false) echo json_encode($row).'<br />';
