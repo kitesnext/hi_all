@@ -118,21 +118,13 @@ $result = array(
     'error' => $error,
 );
 
-/*
-echo json_encode($company);
-echo json_encode($country);
-echo json_encode($category);
-echo json_encode($basebid);
-echo json_encode($bid);
-echo json_encode($budget);
-echo json_encode($requeststatus);
-*/
 //echo '<Br>---------------- WINNER VIEW------------- <br>';
 echo json_encode($answer);
 echo '<Br>---------------- JSON ANSWER------------- <br>';
 echo json_encode($items);
 //echo '<Br>---------------- ERROR VIEW------------- <br>';
 //echo json_encode($result); // ответ в формате json
+
 echo '<Br>---------------- LOG VIEW------------- <br>';
 
 $result_log = $connect->query("SELECT * FROM logfile1 ORDER BY ActID DESC");
