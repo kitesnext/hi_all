@@ -5,7 +5,7 @@ $response = null;
 $error = 0;
 $company = null;
 $requeststatus = 0;
-$answer = "No Companies Passed from BaseBid check" ;
+$answer = "No Companies Passed check" ;
 
 $budget = 0;
 $bid = 0;
