@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset = "UTF-8"/>
+ <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+</head>
+<body>
+ <div class="mypanel"></div>
+  <div class="mypanel2"></div>
+    <div class="mypanel3"></div>
+
+<div id="xlop"></div>
+<script type="text/javascript">
+//	var url = 'http://cp62865.tmweb.ru/stat1.php';
+
+
+/*   
+    var arr=[4,6,7,5,1]
+var html='<table><tr>';
+for (var i=0;i<arr.length;i++){
+html+='<td>'+arr[i]+'</td>';
+}
+html+='</tr></table>';
+ 
+document.getElementById('xlop').innerHTML=html;
+
+
+	var url = 'http://cp62865.tmweb.ru/stat1.php';
+	
+	 table = $("<table/>", {
+        attr: {
+            border: "1",
+            width: "500"
+        }
+    }),
+
+    tr = $("<tr>");
+	
+tr.clone().html("<td>Марка техники</td><td>Модель техники</td><td>Страна производитель</td><td>Цена</td>").appendTo(table);	
+	var text1 = '1111111';
+		
+			window.onload = doLoad;
+
+			function doLoad()
+			{
+			setTimeout( "refresh()", 30*1000 );
+			}
+
+			function refresh()
+			{
+			window.location.reload( true );
+			}
+*/
+	var arrUrl = ['http://cp62865.tmweb.ru/stat1.php','http://next24.tk/stat1.php'];
+	
+	var text = '';	
+	
+	
+	for (var i=0;i<arrUrl.length;i++){
+			var url =  arrUrl[i];
+		$.getJSON(url, function(data) {
+	
+		
+			
+	        text += url+`
+	                Clock: ${data.clock}
+                    Time: ${data.uptime}
+                    Temp: ${data.temp}
+					CPU: ${data.cpuusage}<br>`;
+		
+			
+			document.write(text);
+                   			
+
+	    });    
+
+	};
+
+			
+		 		
+					
+
+</script>
+</body>
+</html>
+
+
