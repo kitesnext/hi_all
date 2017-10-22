@@ -2,8 +2,7 @@
 
 	header("Access-Control-Allow-Origin: *");
 
-
-	$cpuusage = 100 - shell_exec("vmstat | tail -1 | awk '{print $15}'");
+        $cpuusage = 100 - shell_exec("vmstat | tail -1 | awk '{print $15}'");
 	$clock = shell_exec('cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq');
 	$clock = round($clock / 1000);
 	
@@ -16,7 +15,7 @@
 	$temp = round($temp / 1000, 1);
 
 	// answer array
-$result = array(
+        $result = array(
 	
 	'temp' => $temp,
 	'clock' => $clock,
