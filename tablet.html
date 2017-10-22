@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset = "UTF-8"/>
+ <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+</head>
+<body>
+ <div class="mypanel"></div>
+  <div class="mypanel1"></div>
+  <div class="mypanel2"></div>
+    <div class="mypanel3"></div>
+<script type="text/javascript">
+
+	var text = '<table style: border=1 width=700><tr><td> Device </td><td>Clock</td><td>Time:</td><td>Temp:</td><td>CPU: </td></tr>';	
+	
+			window.onload = doLoad;
+
+			function doLoad()
+			{
+			setTimeout( "refresh()", 30*1000 );
+			}
+
+			function refresh()
+			{
+			window.location.reload( true );
+			}
+
+	
+   	    $.getJSON('http://cp62865.tmweb.ru/stat1.php', function(data) {
+			
+	        text +=`<tr><td>'http://cp62865.tmweb.ru/stat1.php'</td>
+	                <td>Clock: ${data.clock}</td>
+                    <td>Time: ${data.uptime}</td>
+                    <td>Temp: ${data.temp}</td>
+					<td>CPU: ${data.cpuusage}</td></tr>`
+			
+			
+          $(".mypanel").html(text);                   				
+
+	    });    
+
+
+		
+		$.getJSON('http://next24.tk/stat1.php', function(data) {
+		
+     	     text =`<tr><td>'http://next24.tk/stat1.php'</td>
+	                <td>Clock: ${data.clock}</td>
+                    <td>Time: ${data.uptime}</td>
+                    <td>Temp: ${data.temp}</td>
+					<td>CPU: ${data.cpuusage}</td></tr>`
+				
+		
+                   
+          $(".mypanel1").html(text+'</table>');				
+
+	    });
+
+</script>
+</body>
+</html>
