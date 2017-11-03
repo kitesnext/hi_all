@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset = "UTF-8"/>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+</head>
+<body>
+ <div class="mypanel"></div>
+ <div class="mypanel1"></div>
+ <div class="mypanel2"></div>
+ <div class="mypanel3"></div>
+<script type="text/javascript">
+		
+			var noAnswer = '&nbsp &nbsp No answer !!! <br> <br>';
+			
+			window.onload = doLoad;
+
+			function doLoad()
+			{
+			setTimeout( "refresh()", 30*1000 );
+			}
+
+			function refresh()
+			{
+			window.location.reload( true );
+			}
+
+    $(".mypanel").html('http://cp62865.tmweb.ru/stat1.php   '+noAnswer);
+    $.getJSON('http://cp62865.tmweb.ru/stat1.php', function(data) {
+        
+       var text = ` http://cp62865.tmweb.ru/stat1.php &nbsp
+                    Clock: ${data.clock}&nbsp
+                    Time: ${data.uptime}&nbsp
+                    Temp: ${data.temp}&nbsp
+					CPU: ${data.cpuusage}<br> <br>`
+                            
+        $(".mypanel").html(text);
+    });
+
+    $(".mypanel1").html('http://next24.tk/stat1.php'+noAnswer);	
+	$.getJSON('http://next24.tk/stat1.php', function(data) {
+        
+       var text = `http://next24.tk/stat1.php &nbsp
+					Clock: ${data.clock}&nbsp
+                    Time: ${data.uptime}&nbsp
+                    Temp: ${data.temp}&nbsp
+					CPU: ${data.cpuusage}<br> <br>`
+                            
+        $(".mypanel1").html(text);
+    });	
+	
+    $(".mypanel2").html('http://cp62865.tmweb.ru/no_agent.php   '+noAnswer);	
+    $.getJSON('http://cp62865.tmweb.ru/no_agent.php', function(data) {
+        
+       var text = ` http://cp62865.tmweb.ru/agent.php &nbsp
+                    Clock: ${data.clock}&nbsp
+                    Time: ${data.uptime}&nbsp
+                    Temp: ${data.temp}&nbsp
+					CPU: ${data.cpuusage}<br> <br>`
+                           
+        $(".mypanel2").html(text);
+    });
+	
+    $(".mypanel3").html('http://next24.tk/stat1.php   '+noAnswer);	
+	$.getJSON('http://next24.tk/stat1.php', function(data) {
+        
+       var text = `http://next24.tk/stat1.php &nbsp
+					Clock: ${data.clock}&nbsp
+                    Time: ${data.uptime}&nbsp
+                    Temp: ${data.temp}&nbsp
+					CPU: ${data.cpuusage}<br> <br>`
+                    
+        
+        $(".mypanel3").html(text);
+    });		
+
+</script>
+</body>
+</html>
