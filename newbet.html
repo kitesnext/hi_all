@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset = "UTF-8"/>
+ 
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<STYLE>
+body { margin:0px; padding: 0px; }
+.header { text-align: center; }
+.container {
+    border: 0px solid black;
+    background: black;
+    width: 100%;
+    height: 100%;
+    float: left;
+    /* min-height: 700px; */
+	height: -webkit-fill-available;
+}
+.top_lk {
+    background: rgb(9,21,25);
+    width: 100%;
+    min-height: 70px;
+    float: left;
+    clear: both;
+}
+.data_lk {
+    float: right;
+    width: 300px;
+    min-height: 70px;
+    font-size: 14px;
+    color: #fff;
+    line-height: 35px;
+    padding-left: 23px;
+}
+.page {
+    border: 0px solid red;
+    width: 600px;
+    clear: both;
+    float: left;
+    position: relative;
+    left: calc(50% - 600px/2);
+	background: #fff;
+	height:auto;
+	padding-bottom: 20px;
+    margin-top: 20px;
+}
+.left_form {
+float:left;
+border: 0px solid green;
+Width: 58%;
+height:auto;
+}
+.right_form {
+float:left;
+border: 0px solid green;
+width:40%;
+height:auto;
+
+}
+#formBet {
+    border: 0px solid cyan;
+    padding: 0 10px 0 10px;
+    background: #bfb5b526;
+}
+#formBet input {
+    clear: both;
+	
+}
+
+#bsub {
+    width: 150px;
+    height: 40px;
+    font-family: Arial;
+    font-size: 15px;
+}
+
+.more {
+	font-family: Philosopher;
+    font-size: 31px;
+    opacity: 1;
+    display: block;
+    border: 1px solid #666;
+    width: 50%;
+    text-align: center;
+    left: calc(50% - 300px/2);
+    position: relative;
+	cursor: pointer;
+}
+
+@media screen and (max-width: 360px) { 
+    .page {
+	   width: 350px;
+	   left: calc(50% - 350px/2);
+	}
+	.right_form {
+	    clear:both;
+	}
+	.left_form, .right_form {
+	    width: 350px;
+	}
+	.more {
+	    left: calc(50% - 350px/2);
+		width:100%;
+	}
+}
+
+
+
+
+</STYLE>
+</head>
+<body>
+
+<div class="container">
+<div class="top_lk">
+   <div class="data_lk">
+       Иннокентий Ф: <span style="color: #666; font-size: 13px;">Счет №: 23423423423423</span><br />
+	   <span style="color: #666; font-size: 13px;">Доступно средств: </span><span id="myCount"></span>
+   </div>
+   
+
+</div>
+
+<div class="page" id="makeBet">
+<h1 class="header">Бинарный опцион</h1>
+
+<div class="left_form">
+<h2>Введите сумму ставок</h2>
+<form action="" id="formBet" >
+		<div>
+		    <p>Введите сумму ставки</p>
+		    <input id="myBet" type="text" name="myBet" placeholder="Введите сумму" >
+        </div>	
+	     <div class="form_stavka">
+		    <p>Индекс биткоина пойдет</p>
+			<label for="Up">Вверх</label><input id="Up" type="radio" name="Up" value="1" >
+		    <label for="Down">Вниз</label><input id="Down" type="radio" name="Up" value="0" >
+		</div>
+  	    
+	<div>
+	<input id =  "agree" type="checkbox" name="agree" onclick="agreeForm(this.form)"><label for="agree">Я ознакомлен с правилами</label> 
+	</div>
+		<input type="button" id="bsub" name="myClick" value="Сделать ставку" disabled >
+	</form>
+</div>
+<div class="right_form">
+<h2>Текущие индексы</h2>
+<div id="mypanel">Refreshing</div>
+</div>
+
+
+
+
+</div>
+<div class="page" id="back" style="display: none">
+	<p  id="resulthidden" style="font-family: Philosopher; font-size: 31px; opacity: 1;text-align: center;">Ставка сделана</p>
+
+	<a id="more" onclick="moreBet()" class="more" style="display:none">Сделать еще ставку</a>
+
+</div>
+</div>
+
+<script type="text/javascript">
+
+var baseRate =0;
+var myBet = 0;
+var myUp = 0;
+var betRate = 0;
+var newRate = 0;
+var winSumm = 0;
+var myCount = 1000;
+
+var refreshInterval = 5*1000;
+
+$("#myCount").html(myCount);
+
+refresh();
+
+
+var timerId = setInterval(function() {
+		
+	refresh();	
+
+}, refreshInterval);
+
+
+	$('[type="button"]').click(function() {
+	$("#myBet").css('border','1px solid gray');
+	var summa = $("#myBet").val();
+	if (summa > 0 && summa <= myCount) {
+	
+	document.getElementById("makeBet").style.display = "none";
+	document.getElementById("back").style.display = "block";
+	this.form.myClick.disabled=1;
+	
+	betRate = baseRate;
+	myUp = $("input[name='Up']:checked").val(); 
+
+	myBet =	$('[name="myBet"]').val();
+	myBet *= 1;	
+	myCount-=summa;
+	$("#myCount").html(myCount);
+		} else { 
+		    $("#myBet").css('border','1px solid red');
+			
+			return false; 
+		}
+	});
+	
+		
+
+
+function refresh() {
+	$.getJSON('https://api.coindesk.com/v1/bpi/currentprice.json?t=123454', function(data) {
+	
+		baseRate = `${data.bpi.USD.rate_float}`;
+		baseRate *=1;
+				
+		$("#myCount").html(myCount);
+		
+	    $("#mypanel").html(baseRate);
+	    	  
+
+	  
+	    if (betRate > 0 && baseRate > 0 ) {
+			newRate = baseRate;
+	    }	  
+	  
+		console.log(refreshInterval+"  "+baseRate+"  "+betRate+"  "+newRate+"  "+myBet+"  "+myUp);
+	    
+		checkWin();	  
+	  
+    }); 
+}
+
+
+
+
+
+function checkWin() {
+	var text = "";
+	if (newRate > 0 && betRate >0 && newRate != betRate ) {
+		if ( (myUp == 1 && newRate > betRate) || (myUp == 0 && newRate < betRate) ) {
+			winSumm = myBet / newRate;
+			myCount = myCount + (myBet*2);
+			text = "Ваш результат по новому курсу "+ winSumm+" Btc";
+		} else {
+			
+			text = "Вы проиграли";
+		}
+		
+		$("#myCount").html(myCount);
+		$("#resulthidden").html(text);
+		
+		$("#makeBet").css("display","none");
+		$("#back").css("display","block");
+		$("#more").css("display","block");
+		
+		$("#formBet").trigger("reset");
+		betRate = 0;
+		newRate = 0;
+		myBet = 0;
+		myUp = 0;
+		winSumm = 0;
+	}
+}			
+
+function moreBet() {
+	$("#back").css('display','none');
+	$("#more").css('display','none');
+	$("#makeBet").css('display','block');
+
+	$("#resulthidden").html("Ставка сделана");
+}
+
+
+
+  function agreeForm(f) {
+
+    if (f.agree.checked) f.myClick.disabled = 0 
+
+    else f.myClick.disabled = 1
+   }
+
+
+</script>
+
+</body>
+</html>
