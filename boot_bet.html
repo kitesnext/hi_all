@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+
+    <!-- Сюда добавить Bootstrap CDN -->
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <STYLE>
+        body {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        .header {
+            text-align: center;
+        }
+
+        #container {
+            border: 0px solid black;
+            background: black;
+            width: 100%;
+            height: 100%;
+            float: left;
+
+            height: -webkit-fill-available;
+        }
+
+        .top_lk {
+            background: rgb(9, 21, 25);
+            width: 100%;
+            min-height: 70px;
+            float: left;
+            clear: both;
+        }
+
+        .data_lk {
+            float: right;
+            width: 300px;
+            min-height: 70px; //font-size: 14px;
+            font-size: 1rem;
+            color: #fff;
+            line-height: 35px;
+            padding-left: 23px;
+        }
+
+        }
+
+        #back {
+            border: 0px solid red;
+
+            clear: both;
+            background: #fff;
+
+            padding-bottom: 20px;
+            margin-top: 20px;
+        }
+
+        #left_form {
+            float: left;
+            border: 0px solid green;
+            font-size: 2rem;
+
+        }
+
+        #right_form {
+            float: left;
+            border: 0px solid green;
+            font-size: 2rem;
+
+        }
+
+        #formBet {
+            border: 0px solid cyan;
+            padding: 0 10px 0 10px;
+            background: #bfb5b526;
+        }
+
+        #formBet input {
+            clear: both;
+
+        }
+
+        .more {
+            font-family: Philosopher;
+            font-size: 31px;
+            opacity: 1;
+            display: block;
+            border: 1px solid #666;
+            width: 50%;
+            text-align: center;
+            left: calc(50% - 300px/2);
+            position: relative;
+            cursor: pointer;
+        }
+    </STYLE>
+</head>
+
+<body>
+
+    <div class="container-fluid" style="background: black; height: -webkit-fill-available;">
+        <div class="top_lk">
+            <div class="data_lk">
+                Иннокентий Ф: <span style="color: #666; font-size: 13px;">Счет №: 23423423423423</span><br />
+                <span style="color: #666; font-size: 13px;">Доступно средств: </span><span id="myCount"></span>
+            </div>
+
+
+        </div>
+
+        <div id="makeBet" class="col-xs-12 col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-9" style="background: #fff; padding-bottom: 20px; margin-top: 20px;">
+            <h1 class="header">Бинарный опцион</h1>
+
+            <div id="left_form">
+                <h2>Введите сумму ставок</h2>
+                <form action="" id="formBet">
+                    <div>
+                        <p>Введите сумму ставки</p>
+                        <input id="myBet" type="text" name="myBet" placeholder="Введите сумму">
+                    </div>
+                    <div>
+                        <p>Индекс биткоин пойдет</p>
+                        <label for="Up">Вверх </label><input id="Up" type="radio" name="Up" value="1" class="radio-align-left">
+                        <label for="Down">Вниз </label><input id="Down" type="radio" name="Up" value="0" class="radio-align-right">
+                    </div>
+
+                    <div>
+                        <input id="agree" type="checkbox" name="agree" onclick="agreeForm(this.form)"><label for="agree">Я ознакомлен с правилами</label>
+                    </div>
+                    <input type="button" class="btn btn-lg btn-default btn-block" id="bsub" name="myClick" value="Сделать ставку" disabled>
+                </form>
+            </div>
+            <div id="right_form">
+                <h2>Текущие индексы</h2>
+                <div id="mypanel">Refreshing</div>
+            </div>
+
+
+
+
+        </div>
+        <div class="col-xs-12 col-lg-6 col-md-8 col-sm-9" id="back" style="background: #fff; display: none">
+            <p id="resulthidden" style="font-family: Philosopher; font-size: 31px; opacity: 1;text-align: center;">Ставка сделана</p>
+
+            <input type="button" id="more" onclick="moreBet()" class="btn btn-lg btn-block" style="display:none" value="Сделать еще ставку">
+
+        </div>
+
+    </div>
+
+    <script type="text/javascript">
+        var baseRate = 0;
+        var myBet = 0;
+        var myUp = 0;
+        var betRate = 0;
+        var newRate = 0;
+        var winSumm = 0;
+        var myCount = 1000;
+
+        var refreshInterval = 5 * 1000;
+
+        $("#myCount").html(myCount);
+
+        refresh();
+
+
+        var timerId = setInterval(function() {
+
+            refresh();
+
+        }, refreshInterval);
+
+
+        $('[type="button"]').click(function() {
+            $("#myBet").css('border', '1px solid gray');
+            var summa = $("#myBet").val();
+            if (summa > 0 && summa <= myCount) {
+
+                document.getElementById("makeBet").style.display = "none";
+                document.getElementById("back").style.display = "block";
+                this.form.myClick.disabled = 1;
+
+                betRate = baseRate;
+                myUp = $("input[name='Up']:checked").val();
+
+                myBet = $('[name="myBet"]').val();
+                myBet *= 1;
+                myCount -= summa;
+                $("#myCount").html(myCount);
+            } else {
+                $("#myBet").css('border', '1px solid red');
+
+                return false;
+            }
+        });
+
+
+
+
+        function refresh() {
+            $.getJSON('https://api.coindesk.com/v1/bpi/currentprice.json?t=123454', function(data) {
+
+                baseRate = `${data.bpi.USD.rate_float}`;
+                baseRate *= 1;
+
+                $("#myCount").html(myCount);
+
+                $("#mypanel").html(baseRate);
+
+
+
+                if (betRate > 0 && baseRate > 0) {
+                    newRate = baseRate;
+                }
+
+                console.log(refreshInterval + "  " + baseRate + "  " + betRate + "  " + newRate + "  " + myBet + "  " + myUp);
+
+                checkWin();
+
+            });
+        }
+
+
+
+
+        function checkWin() {
+            var text = "";
+            if (newRate > 0 && betRate > 0 && newRate != betRate) {
+                if ((myUp == 1 && newRate > betRate) || (myUp == 0 && newRate < betRate)) {
+                    winSumm = myBet / newRate;
+                    myCount = myCount + (myBet * 2);
+                    text = "Ваш результат по новому курсу " + winSumm + " Btc";
+                } else {
+
+                    text = "Вы проиграли";
+                }
+
+                $("#myCount").html(myCount);
+                $("#resulthidden").html(text);
+
+                $("#makeBet").css("display", "none");
+                $("#back").css("display", "block");
+                $("#more").css("display", "block");
+
+                $("#formBet").trigger("reset");
+                betRate = 0;
+                newRate = 0;
+                myBet = 0;
+                myUp = 0;
+                winSumm = 0;
+            }
+        }
+
+        function moreBet() {
+            $("#back").css('display', 'none');
+            $("#more").css('display', 'none');
+            $("#makeBet").css('display', 'block');
+
+            $("#resulthidden").html("Ставка сделана");
+        }
+
+
+
+        function agreeForm(f) {
+
+            if (f.agree.checked) f.myClick.disabled = 0
+
+            else f.myClick.disabled = 1
+        }
+    </script>
+
+</body>
+
+</html>
